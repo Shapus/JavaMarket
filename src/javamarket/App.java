@@ -10,12 +10,11 @@ import entity.Deal;
 import entity.Product;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
-import tools.files.FileManager;
 import tools.managers.CustomerManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
 import utils.Print;
+import utils.Scan;
 
 /**
  *
@@ -66,7 +65,7 @@ public class App {
                 String exit = "n";
         System.out.println("------ МАГАЗИН ------");
         while(exit.equals("n")){
-            Print.printList(Arrays.asList(taskList));
+            Print.printList(taskList);
             if(getOperation()){
                 System.out.println(BLUE_BACKGROUND + " " + WHITE + taskList[operation] + " " + RESET);
             }
@@ -74,44 +73,43 @@ public class App {
             switch (operation) {
                 case 0:                
                     Print.alert("Выйти из программы? y/n");
-                    exit = scanner.nextLine().toLowerCase();
+                    exit = Scan.getString().toLowerCase();
                     break;
                 case 1:     
-                    System.out.println("Введите название продукта: ");
-                    String name = scanner.nextLine();
-                    System.out.println("Введите стоимоть продукта: ");
-                    System.out.println("Введите количество: ");
-                    ProductManager.add();
+                    String product_name = Scan.getString("Введите название продукта: ");
+                    double product_price = Scan.getDouble("Введите стоимоть продукта: ");
+                    int product_quantity = Scan.getInt("Введите количество: ");
+                    ProductManager.add(new Product(product_name, product_price, product_quantity));
                     break;
                 case 2:   
-                    BookManager.deleteBook();
+                    String customer_name = Scan.getString("Введите имя покупателя: ");
+                    CustomerManager.add(new Customer(customer_name));
                     break;
                 case 3:   
-                    Print.printList(books);
+                    Print.printList(products);
                     break;
                 case 4:    
-                    ReaderManager.addReader();
+                    Print.printList(customers);
                     break;
                 case 5:   
-                    ReaderManager.deleteReader();
+                    Print.printList(products);
+                    if(products.size() > 0){
+                        try{
+                        int product_index = Scan.getIndex(products, "Выберите продукт для удаления: ");
+                        }catch(NumberFormatException e){
+                            Print.error("Неверный индекс");
+                        }
+                    }
                     break;
                 case 6:    
-                    Print.printList(readers);
-                    break;
-                case 7:    
-                    TrackManager.giveBook();
-                    break;
-                case 8:    
-                    TrackManager.returnBook();
-                    break;
-                case 9:    
-                    TrackManager.getTrack();
-                    break;
-                case 10:    
-                    TrackManager.getTracks();
-                    break;
-                case 11:    
-                    TrackManager.getAllTracks();
+                    Print.printList(customers);
+                    if(customers.size() > 0){
+                        try{
+                            int customer_index = Scan.getIndex(customers, "Выберите покупателя для удаления: ");
+                        }catch(NumberFormatException e){
+                            Print.error("Неверный индекс");
+                        }
+                    }
                     break;
                 default:
                     Print.error("Нет такой операции");
@@ -126,20 +124,12 @@ public class App {
     //get operation
     private boolean getOperation(){
         boolean gotOperation = false;
-        String operation_str;
-        System.out.print("Выберите операцию: ");
         try{
-            operation_str = scanner.nextLine();
-            operation = Integer.parseInt(operation_str);
-            if(operation > taskList.length-1 || operation < 0){
-                throw new NumberFormatException();
-            }
+            operation = Scan.getIndex(taskList, "Введите номер операции: ");
             gotOperation = true;
         }catch(NumberFormatException e){
             Print.error("Операция введена неверно");
-        }finally{
-            return gotOperation;
         }
-    }
+        return gotOperation;
     }
 }

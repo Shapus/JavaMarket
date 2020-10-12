@@ -6,9 +6,9 @@
 package tools.managers;
 
 import entity.Deal;
+import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
-import static javamarket.App.customers;
 import static javamarket.App.deals;
 
 /**
@@ -25,11 +25,14 @@ public class DealManager {
     
     //load customers ArrayList from file
     public static void load(){
-        customers = FileManager.loadFromFile(App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
+        deals = FileManager.loadFromFile(App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
+        if(deals == null){
+            deals = new ArrayList();
+        }
     }
     
     //save customers ArrayList to file
     public static void save(){
-        FileManager.saveToFile(customers, App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
+        FileManager.saveToFile(deals, App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
     }
 }

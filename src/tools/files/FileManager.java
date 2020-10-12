@@ -55,8 +55,7 @@ public class FileManager {
             Print.error("Ошибка ввода/вывода:", ex.toString());
         } catch (ClassNotFoundException ex) {
             Print.error("Ошибка чтения файла:", ex.toString());
-        }finally{
-            return out;
         }
+        return out;
     }
 }

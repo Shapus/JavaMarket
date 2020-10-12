@@ -16,13 +16,13 @@ public class Product {
     //variables
     private int id;
     private String name;
-    private double cost;
+    private double price;
     private int quantity;
     //constructors
-    public Product(String name, double cost, int quantity){
+    public Product(String name, double price, int quantity){
         this.id = this.hashCode();
         this.name = name;
-        this.cost = cost;
+        this.price = price;
         this.quantity = quantity;
     }
     
@@ -32,7 +32,7 @@ public class Product {
         return "Product{" + 
                 "id=" + id + 
                 ", name=" + name + 
-                ", cost=" + cost + 
+                ", cost=" + price + 
                 '}';
     }
 
@@ -44,7 +44,7 @@ public class Product {
         return name;
     }
     public double getCost() {
-        return cost;
+        return price;
     }
     public int getQuantity() {
         return quantity;
@@ -61,11 +61,11 @@ public class Product {
     public boolean setCost(double cost) {
         try{
             if(cost < 0) throw new NumberFormatException();
-            this.cost = cost;
+            this.price = cost;
             return true;
         }catch(NumberFormatException e){
             Print.error("Нельзя установить стоимость продукта меньше нуля\nУстановлена стоимость 1");
-            this.cost = 1;
+            this.price = 1;
             return false;
         }
     }

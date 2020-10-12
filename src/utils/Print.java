@@ -23,18 +23,39 @@ public class Print {
         }
         
         //get strings for printing (split object.toString() with ",")
-        String[][] strs = getStrs(list);
+        String[] strs = getStrs(list);
         int len = getLen(strs);
         
         //print strings 
         for (int i=0;i<strs.length;i++) {
             printLine(len);
             System.out.printf("| %"+-len+"d. |\n", i+1);
-            for(int j=0;j<strs[i].length;j++){
-                System.out.printf("| %"+-len+"s |\n", strs[i][j]);
+            for(int j=0;j<strs.length;j++){
+                System.out.printf("| %"+-len+"s |\n", strs[i]);
             } 
             printLine(len);
         }
+    }
+    //print menu with borders
+    public static void printList(String[] list){
+        
+        //if list is empty
+        if(list.length == 0){
+            emptyMessage();
+            return;
+        }
+        
+        //get strings for printing (split object.toString() with ",")
+        int len = getLen(list);
+        
+        //print strings 
+        printLine(len);
+        for (int i=0;i<list.length;i++) {
+            String str = String.format("| %d. %s ", i, list[i]);
+            System.out.printf(String.format("%"+-len+"s",str));
+            System.out.println("|");
+        }
+        printLine(len);
     }
     
     //if no data message
@@ -72,19 +93,19 @@ public class Print {
            System.out.print("-"); 
         }System.out.println("");
     }
-    public static int getLen(String[][] strs){
+    public static int getLen(String[] strs){
         int len = 0;
+        String str;
         for (int i=0;i<strs.length;i++) {
-            for (int j=0;j<strs.length;j++) {
-                len = max(len, strs[i][j].length());    
-            }
+            str = String.format("| %d. %s |\n", i, strs[i]);
+            len = max(len, str.length());    
         }
         return len;
     }
-    public static String[][] getStrs(ArrayList list){
-        String[][] items = new String[list.size()][];
+    public static String[] getStrs(ArrayList list){
+        String[] items = new String[list.size()];
         for(int i=0;i<list.size();i++){
-            items[i] = list.get(i).toString().split(",");
+            items[i] = list.get(i).toString();
         }
         return items;
     }

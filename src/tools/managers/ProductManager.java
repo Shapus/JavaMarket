@@ -6,9 +6,9 @@
 package tools.managers;
 
 import entity.Product;
+import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
-import static javamarket.App.customers;
 import static javamarket.App.products;
 
 /**
@@ -53,12 +53,15 @@ public class ProductManager {
     
     //load customers ArrayList from file
     public static void load(){
-        customers = FileManager.loadFromFile(App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+        products = FileManager.loadFromFile(App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+        if(products == null){
+            products = new ArrayList();
+        }
     }
     
     //save customers ArrayList to file
     public static void save(){
-        FileManager.saveToFile(customers, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+        FileManager.saveToFile(products, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
     }
 }
 
