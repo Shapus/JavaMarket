@@ -5,6 +5,7 @@
  */
 package tools.files;
 
+import java.io.File;
 import utils.Print;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,15 +22,30 @@ import java.util.ArrayList;
 public class FileManager {
     
     //save arrayList to file
-    public static void saveToFile(ArrayList list, String path){
-        FileOutputStream fileOut = null;
-        ObjectOutputStream objectOut = null;
+    public static boolean saveToFile(ArrayList list, String path){
+        boolean successSave = false;            //return statement
+        FileOutputStream fileOut = null;        //file stream
+        ObjectOutputStream objectOut = null;    //object stream
+        
+        //create file if it doesn't exist
+        File f = new File(path);
+        if(!f.exists()){
+            try {
+                f.createNewFile();
+            } catch (IOException ex) {
+                Print.error("Не удалось создать файл", " "+path);
+            }
+        }
+        
+        //try to save data to file
         try {
             fileOut = new FileOutputStream(path);
             objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(list);
             objectOut.flush();
+            successSave = true;
         } catch (FileNotFoundException ex) {
+            Print.error("Файл не найден");
         } catch (IOException ex) {
             Print.error("Ошибка ввода/вывода:", ex.toString());
         } finally {
@@ -38,14 +54,17 @@ public class FileManager {
             } catch (IOException ex) {
                 Print.error("Ошибка закрытия файла:", ex.toString());
             }
+            return successSave;
         }
     }
     
     //load arrayList from file
     public static ArrayList loadFromFile(String path){
-        ArrayList out = new ArrayList();
-        FileInputStream fileIn = null;
-        ObjectInputStream objectIn = null;
+        ArrayList out = new ArrayList();    //return statement
+        FileInputStream fileIn = null;      //load fram path
+        ObjectInputStream objectIn = null;  //input file stream
+        
+        //try to load file
         try {
             fileIn = new FileInputStream(path);
             objectIn = new ObjectInputStream(fileIn);

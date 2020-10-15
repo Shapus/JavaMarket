@@ -5,13 +5,15 @@
  */
 package entity;
 
+import java.io.Serializable;
 import java.util.Date;
+import javamarket.App;
 
 /**
  *
  * @author pupil
  */
-public class Deal {
+public class Deal implements Serializable {
     
     //variables
     private int id;
@@ -39,13 +41,11 @@ public class Deal {
     //toString
     @Override
     public String toString() {
-        return "Deal{" + 
-                "id=" + id + 
-                ", date=" + date + 
-                ", customer=" + customer + 
-                ", product=" + product + 
-                ", quantity=" + quantity + 
-                '}';
+        return "Deal " + App.BLUE + id + App.RESET + ":\n" +
+                "   date = " + App.BLUE + date + App.RESET + "\n" +
+                "   customer = " + App.BLUE + customer + App.RESET + "\n" +
+                "   product = " + App.BLUE + product + App.RESET + "\n" +
+                "   quantity = " + App.BLUE + quantity + App.RESET;
     }
     
     //getters

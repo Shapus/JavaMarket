@@ -17,18 +17,18 @@ import static javamarket.App.products;
  */
 public class ProductManager {
     //add customer to ArrayList and save to file
-    public static void add(Product product){
+    public static boolean add(Product product){
         products.add(product);
-        save();
+        return save();
     }
     
     //delete customer from ArrayList
-    public static void delete(Product product){
+    public static boolean delete(Product product){
         products.remove(product);
-        save();
+        return save();
     }
     //delete customer from ArrayList with id
-    public static void delete(int id){
+    public static boolean delete(int id){
         Product customer = null;
         for(Product p : products){
             if(p.getId() == id){
@@ -37,12 +37,13 @@ public class ProductManager {
             }
         }
         products.remove(customer);
-        save();
+        return save();
     }
     
-    public static void increaseQuantity(Product product, int count){
-        product.setQuantity(product.getQuantity()+count);
-        save();
+    public static boolean increaseQuantity(Product product, int count){
+        boolean setQuantity = product.setQuantity(product.getQuantity()+count);
+        if(!setQuantity) return setQuantity;
+        return save();
     }
     
     public static boolean decreaseQuantity(Product product, int count){
@@ -60,8 +61,8 @@ public class ProductManager {
     }
     
     //save customers ArrayList to file
-    public static void save(){
-        FileManager.saveToFile(products, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+    public static boolean save(){
+        return FileManager.saveToFile(products, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
     }
 }
 

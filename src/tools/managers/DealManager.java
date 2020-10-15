@@ -18,9 +18,9 @@ import static javamarket.App.deals;
 public class DealManager {
         
     //add customer to ArrayList and save to file
-    public static void add(Deal deal){
+    public static boolean add(Deal deal){
         deals.add(deal);
-        save();
+        return save();
     }
     
     //load customers ArrayList from file
@@ -32,7 +32,7 @@ public class DealManager {
     }
     
     //save customers ArrayList to file
-    public static void save(){
-        FileManager.saveToFile(deals, App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
+    public static boolean save(){
+        return FileManager.saveToFile(deals, App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
     }
 }

@@ -22,20 +22,19 @@ public class Print {
             return;
         }
         
-        //get strings for printing (split object.toString() with ",")
-        String[] strs = getStrs(list);
-        int len = getLen(strs);
+        //get max length of printing strings
+        int len = getLen(list);
         
         //print strings 
-        for (int i=0;i<strs.length;i++) {
-            printLine(len);
-            System.out.printf("| %"+-len+"d. |\n", i+1);
-            for(int j=0;j<strs.length;j++){
-                System.out.printf("| %"+-len+"s |\n", strs[i]);
-            } 
-            printLine(len);
+        printLine(len);
+        for (int i=0;i<list.size();i++) {          
+            String str = String.format("| %d. %s ", i+1, list.get(i).toString());
+            System.out.printf("%"+-len+"s |\n", str);
         }
+        printLine(len);
     }
+    
+    
     //print menu with borders
     public static void printList(String[] list){
         
@@ -45,15 +44,14 @@ public class Print {
             return;
         }
         
-        //get strings for printing (split object.toString() with ",")
+        //get max length of printing strings
         int len = getLen(list);
         
         //print strings 
         printLine(len);
         for (int i=0;i<list.length;i++) {
             String str = String.format("| %d. %s ", i, list[i]);
-            System.out.printf(String.format("%"+-len+"s",str));
-            System.out.println("|");
+            System.out.printf(String.format("%"+-len+"s |\n",str));
         }
         printLine(len);
     }
@@ -93,20 +91,24 @@ public class Print {
            System.out.print("-"); 
         }System.out.println("");
     }
-    public static int getLen(String[] strs){
+    
+    //get max length of printing strings
+    public static int getLen(ArrayList list){
         int len = 0;
         String str;
-        for (int i=0;i<strs.length;i++) {
-            str = String.format("| %d. %s |\n", i, strs[i]);
+        for (int i=0;i<list.size();i++) {
+            str = String.format("| %d. %s |\n", i, list.get(i).toString());
             len = max(len, str.length());    
         }
         return len;
     }
-    public static String[] getStrs(ArrayList list){
-        String[] items = new String[list.size()];
-        for(int i=0;i<list.size();i++){
-            items[i] = list.get(i).toString();
+    public static int getLen(String[] list){
+        int len = 0;
+        String str;
+        for (int i=0;i<list.length;i++) {
+            str = String.format("| %d. %s |\n", i, list[i]);
+            len = max(len, str.length());    
         }
-        return items;
+        return len;
     }
 }

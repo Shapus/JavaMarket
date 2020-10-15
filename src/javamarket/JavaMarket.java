@@ -5,8 +5,6 @@
  */
 package javamarket;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author pupil

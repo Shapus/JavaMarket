@@ -5,13 +5,15 @@
  */
 package entity;
 
+import java.io.Serializable;
+import javamarket.App;
 import utils.Print;
 
 /**
  *
  * @author pupil
  */
-public class Product {
+public class Product implements Serializable {
     
     //variables
     private int id;
@@ -29,11 +31,10 @@ public class Product {
     //toString
     @Override
     public String toString() {
-        return "Product{" + 
-                "id=" + id + 
-                ", name=" + name + 
-                ", cost=" + price + 
-                '}';
+        return  "Product " + App.BLUE + id + App.RESET + ": { " +     
+                "name = " + App.BLUE + name + App.RESET + ", " +
+                "cost = " + App.BLUE + price + App.RESET + ", " +
+                "quantity = " + App.BLUE + quantity + App.RESET + " }";
     }
 
     //getters

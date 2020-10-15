@@ -9,7 +9,6 @@ import entity.Customer;
 import entity.Deal;
 import entity.Product;
 import java.util.ArrayList;
-import java.util.Arrays;
 import tools.managers.CustomerManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
@@ -23,7 +22,7 @@ import utils.Scan;
 public class App {
     
     //file paths
-    public static String DIRECTORY_PATH = "data/";
+    public static String DIRECTORY_PATH = "data\\";
     public static String CUSTOMERS_FILE_PATH = "customers.txt";
     public static String PRODUCTS_FILE_PATH = "products.txt";
     public static String DEALS_FILE_PATH = "deals.txt";
@@ -79,11 +78,25 @@ public class App {
                     String product_name = Scan.getString("Введите название продукта: ");
                     double product_price = Scan.getDouble("Введите стоимоть продукта: ");
                     int product_quantity = Scan.getInt("Введите количество: ");
-                    ProductManager.add(new Product(product_name, product_price, product_quantity));
+                    Product product = new Product(product_name, product_price, product_quantity);
+                    boolean successAddProduct = ProductManager.add(product);
+                    if(successAddProduct){
+                        System.out.println("Продукт " + product.toString() + " добавлен");
+                    }
+                    else{
+                        Print.error("Не удалось добавить продукт", " "+product.toString());
+                    }
                     break;
                 case 2:   
                     String customer_name = Scan.getString("Введите имя покупателя: ");
-                    CustomerManager.add(new Customer(customer_name));
+                    Customer customer = new Customer(customer_name);
+                    boolean successAddCustomer = CustomerManager.add(customer);
+                    if(successAddCustomer){
+                        System.out.println("Покупатель " + customer.toString() + " зарегистрирован");
+                    }
+                    else{
+                        Print.error("Не удалось зарегистрировать покупателя", " "+customer.toString());
+                    }
                     break;
                 case 3:   
                     Print.printList(products);
@@ -95,7 +108,7 @@ public class App {
                     Print.printList(products);
                     if(products.size() > 0){
                         try{
-                        int product_index = Scan.getIndex(products, "Выберите продукт для удаления: ");
+                            int product_index = Scan.getIndex(products, "Выберите продукт для удаления: ");
                         }catch(NumberFormatException e){
                             Print.error("Неверный индекс");
                         }

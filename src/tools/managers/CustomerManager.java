@@ -17,18 +17,18 @@ import static javamarket.App.customers;
 public class CustomerManager {
     
     //add customer to ArrayList and save to file
-    public static void add(Customer customer){
+    public static boolean add(Customer customer){
         customers.add(customer);
-        save();
+        return save();
     }
     
     //delete customer from ArrayList
-    public static void delete(Customer customer){
+    public static boolean delete(Customer customer){
         customers.remove(customer);
-        save();
+        return save();
     }
     //delete customer from ArrayList with id
-    public static void delete(int id){
+    public static boolean delete(int id){
         Customer customer = null;
         for(Customer c : customers){
             if(c.getId() == id){
@@ -37,7 +37,7 @@ public class CustomerManager {
             }
         }
         customers.remove(customer);
-        save();
+        return save();
     }
     
     //load customers ArrayList from file
@@ -46,7 +46,7 @@ public class CustomerManager {
     }
     
     //save customers ArrayList to file
-    public static void save(){
-        FileManager.saveToFile(customers, App.DIRECTORY_PATH+App.CUSTOMERS_FILE_PATH);
+    public static boolean save(){
+        return FileManager.saveToFile(customers, App.DIRECTORY_PATH+App.CUSTOMERS_FILE_PATH);
     }
 }
