@@ -8,7 +8,10 @@ package javamarket;
 import entity.Customer;
 import entity.Deal;
 import entity.Product;
+import entity.User;
 import java.util.ArrayList;
+import tools.files.FileManager;
+import userinterface.API;
 import tools.managers.CustomerManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
@@ -21,11 +24,15 @@ import utils.Scan;
  */
 public class App {
     
+    //user roles
+    public static enum Role{GUEST, USER, ADMIN};
+    
     //file paths
     public static String DIRECTORY_PATH = "data\\";
     public static String CUSTOMERS_FILE_PATH = "customers.txt";
     public static String PRODUCTS_FILE_PATH = "products.txt";
     public static String DEALS_FILE_PATH = "deals.txt";
+    public static String USERS_FILE_PATH = "users.txt";
     
     //console colors
     public static final String RESET = "\u001B[0m";
@@ -39,10 +46,11 @@ public class App {
     public static final String WHITE_BACKGROUND = "\u001B[47m";
     
     
-    
-    public static ArrayList<Customer> customers;
-    public static ArrayList<Product> products;
-    public static ArrayList<Deal> deals;
+    //market data
+    protected static ArrayList<Customer> customers;
+    protected static ArrayList<Product> products;
+    protected static ArrayList<Deal> deals;
+    protected static ArrayList<User> users;
     public static String[] taskList = {
                         "Выйти из программы",
                         "Добавить продукт",
@@ -56,47 +64,29 @@ public class App {
                         "Посмотреть последние n записей",
                         "Посмотреть все записи"
                         };
-    private int operation = 0;
+    private int operation;
+    private String exit;
+    
+    
     public void run(){
-        ProductManager.load();
-        CustomerManager.load();
-        DealManager.load();
-                String exit = "n";
+        FileManager.loadAll();
+        exit = "n";
         System.out.println("------ МАГАЗИН ------");
         while(exit.equals("n")){
             Print.printList(taskList);
-            if(getOperation()){
-                System.out.println(BLUE_BACKGROUND + " " + WHITE + taskList[operation] + " " + RESET);
+            operation = Scan.getOperation(taskList);
+            if(operation != -1){
+                Print.alertln(taskList[operation]);
             }
-
             switch (operation) {
                 case 0:                
-                    Print.alert("Выйти из программы? y/n");
-                    exit = Scan.getString().toLowerCase();
+                    exit = API.exit();
                     break;
                 case 1:     
-                    String product_name = Scan.getString("Введите название продукта: ");
-                    double product_price = Scan.getDouble("Введите стоимоть продукта: ");
-                    int product_quantity = Scan.getInt("Введите количество: ");
-                    Product product = new Product(product_name, product_price, product_quantity);
-                    boolean successAddProduct = ProductManager.add(product);
-                    if(successAddProduct){
-                        System.out.println("Продукт " + product.toString() + " добавлен");
-                    }
-                    else{
-                        Print.error("Не удалось добавить продукт", " "+product.toString());
-                    }
+                    API.addProduct();
                     break;
                 case 2:   
-                    String customer_name = Scan.getString("Введите имя покупателя: ");
-                    Customer customer = new Customer(customer_name);
-                    boolean successAddCustomer = CustomerManager.add(customer);
-                    if(successAddCustomer){
-                        System.out.println("Покупатель " + customer.toString() + " зарегистрирован");
-                    }
-                    else{
-                        Print.error("Не удалось зарегистрировать покупателя", " "+customer.toString());
-                    }
+                    API.addCustomer();
                     break;
                 case 3:   
                     Print.printList(products);
@@ -106,43 +96,17 @@ public class App {
                     break;
                 case 5:   
                     Print.printList(products);
-                    if(products.size() > 0){
-                        try{
-                            int product_index = Scan.getIndex(products, "Выберите продукт для удаления: ");
-                        }catch(NumberFormatException e){
-                            Print.error("Неверный индекс");
-                        }
-                    }
+                    API.deleteProduct();
                     break;
                 case 6:    
                     Print.printList(customers);
-                    if(customers.size() > 0){
-                        try{
-                            int customer_index = Scan.getIndex(customers, "Выберите покупателя для удаления: ");
-                        }catch(NumberFormatException e){
-                            Print.error("Неверный индекс");
-                        }
-                    }
+                    API.deleteCustomer();
                     break;
                 default:
-                    Print.error("Нет такой операции");
+                    Print.errorln("Нет такой операции");
             }
             System.out.print("\n\n");
         }
-        ProductManager.save();
-        CustomerManager.save();
-        DealManager.save();
-    }
-    
-    //get operation
-    private boolean getOperation(){
-        boolean gotOperation = false;
-        try{
-            operation = Scan.getIndex(taskList, "Введите номер операции: ");
-            gotOperation = true;
-        }catch(NumberFormatException e){
-            Print.error("Операция введена неверно");
-        }
-        return gotOperation;
+        FileManager.saveAll();
     }
 }

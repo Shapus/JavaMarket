@@ -13,19 +13,20 @@ import utils.Print;
  *
  * @author pupil
  */
-public class Product implements Serializable {
+public final class Product implements Serializable {
     
     //variables
     private int id;
     private String name;
     private double price;
     private int quantity;
+    
     //constructors
     public Product(String name, double price, int quantity){
         this.id = this.hashCode();
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+        this.setName(name);
+        this.setPrice(price);
+        this.setQuantity(quantity);
     }
     
     //toString
@@ -56,16 +57,21 @@ public class Product implements Serializable {
         this.id = id;
     }
     public void setName(String name) {
-        this.name = name;
+        try{
+            if(name.isEmpty() || name.split(" ").length == 0 || name.split(" ").equals("")) throw new RuntimeException();
+            this.name = name;
+        }catch(RuntimeException e){
+            Print.errorln("Пустое имя пользователя");
+        }
     }
     //return true if value above zero, else return false
-    public boolean setCost(double cost) {
+    public boolean setPrice(double cost) {
         try{
             if(cost < 0) throw new NumberFormatException();
             this.price = cost;
             return true;
         }catch(NumberFormatException e){
-            Print.error("Нельзя установить стоимость продукта меньше нуля\nУстановлена стоимость 1");
+            Print.errorln("Нельзя установить стоимость продукта меньше нуля\nУстановлена стоимость 1");
             this.price = 1;
             return false;
         }
@@ -77,7 +83,7 @@ public class Product implements Serializable {
             this.quantity = quantity;
             return true;
         }catch(NumberFormatException e){
-            Print.error("Нельзя установить количество продукта меньше нуля");
+            Print.errorln("Нельзя установить количество продукта меньше нуля");
             return false;
         }
     }

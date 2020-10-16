@@ -67,17 +67,29 @@ public class Print {
     
     //message with red bg
     public static void error(String str){
-        System.out.println(App.RED_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET);
+        System.out.print(App.RED_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET);
     }
     public static void error(String str, String after){
+        System.out.print(App.RED_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET + " " + after);
+    }
+    public static void errorln(String str){
+        System.out.println(App.RED_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET);
+    }
+    public static void errorln(String str, String after){
         System.out.println(App.RED_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET + " " + after);
     }
     
     //message with blue bg
     public static void alert(String str){
-        System.out.println(App.BLUE_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET);
+        System.out.print(App.BLUE_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET);
     }
     public static void alert(String str, String after){
+        System.out.print(App.BLUE_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET + " " + after);
+    }
+    public static void alertln(String str){
+        System.out.println(App.BLUE_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET);
+    }
+    public static void alertln(String str, String after){
         System.out.println(App.BLUE_BACKGROUND + App.WHITE + " " + str.toUpperCase() + " " + App.RESET + " " + after);
     }
     

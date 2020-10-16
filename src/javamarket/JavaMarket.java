@@ -5,6 +5,8 @@
  */
 package javamarket;
 
+import security.Security;
+
 /**
  *
  * @author pupil
@@ -16,6 +18,8 @@ public class JavaMarket {
      */
     public static void main(String[] args) {
         App app = new App();
+        Security security = new Security();
+        security.run();
         app.run();
     }
     

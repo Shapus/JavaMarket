@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import tools.managers.CustomerManager;
+import tools.managers.DealManager;
+import tools.managers.ProductManager;
+import tools.managers.UserManager;
 
 /**
  *
@@ -25,7 +29,7 @@ public class FileManager {
     public static boolean saveToFile(ArrayList list, String path){
         boolean successSave = false;            //return statement
         FileOutputStream fileOut = null;        //file stream
-        ObjectOutputStream objectOut = null;    //object stream
+        ObjectOutputStream objectOut;    //object stream
         
         //create file if it doesn't exist
         File f = new File(path);
@@ -33,7 +37,7 @@ public class FileManager {
             try {
                 f.createNewFile();
             } catch (IOException ex) {
-                Print.error("Не удалось создать файл", " "+path);
+                Print.errorln("Не удалось создать файл", " "+path);
             }
         }
         
@@ -45,24 +49,24 @@ public class FileManager {
             objectOut.flush();
             successSave = true;
         } catch (FileNotFoundException ex) {
-            Print.error("Файл не найден");
+            Print.errorln("Файл не найден");
         } catch (IOException ex) {
-            Print.error("Ошибка ввода/вывода:", ex.toString());
+            Print.errorln("Ошибка ввода/вывода при сохранении:", ex.toString());
         } finally {
             try {
                 fileOut.close();
             } catch (IOException ex) {
-                Print.error("Ошибка закрытия файла:", ex.toString());
-            }
-            return successSave;
+                Print.errorln("Ошибка закрытия файла:", ex.toString());
+            } 
         }
+        return successSave;
     }
     
     //load arrayList from file
     public static ArrayList loadFromFile(String path){
         ArrayList out = new ArrayList();    //return statement
-        FileInputStream fileIn = null;      //load fram path
-        ObjectInputStream objectIn = null;  //input file stream
+        FileInputStream fileIn;      //load fram path
+        ObjectInputStream objectIn;  //input file stream
         
         //try to load file
         try {
@@ -71,10 +75,25 @@ public class FileManager {
             out = (ArrayList) objectIn.readObject();
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
-            Print.error("Ошибка ввода/вывода:", ex.toString());
+            Print.errorln("Ошибка ввода/вывода при чтении:", ex.toString());
         } catch (ClassNotFoundException ex) {
-            Print.error("Ошибка чтения файла:", ex.toString());
+            Print.errorln("Ошибка чтения файла:", ex.toString());
         }
         return out;
+    }
+    
+    //save all
+    public static void saveAll(){
+        ProductManager.save();
+        CustomerManager.save();
+        DealManager.save();
+    }
+    
+   //load all
+   public static void loadAll(){
+        ProductManager.load();
+        CustomerManager.load();
+        DealManager.load();
+        UserManager.load();
     }
 }

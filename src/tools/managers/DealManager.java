@@ -9,14 +9,18 @@ import entity.Deal;
 import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
-import static javamarket.App.deals;
 
 /**
  *
  * @author pupil
  */
-public class DealManager {
+public class DealManager extends App{
         
+    //get deals
+    public static ArrayList<Deal> getDeals(){
+        return deals;
+    }
+    
     //add customer to ArrayList and save to file
     public static boolean add(Deal deal){
         deals.add(deal);

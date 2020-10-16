@@ -16,11 +16,11 @@ import javamarket.App;
 public class Deal implements Serializable {
     
     //variables
-    private int id;
-    private Date date;
-    private Customer customer;
-    private Product product;
-    private int quantity;
+    private final int id;
+    private final Date date;
+    private final Customer customer;
+    private final Product product;
+    private final int quantity;
     
     //costructors
     public Deal(int id, int date, Customer customer, Product product){

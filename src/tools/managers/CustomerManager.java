@@ -6,15 +6,20 @@
 package tools.managers;
 
 import entity.Customer;
+import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
-import static javamarket.App.customers;
 
 /**
  *
  * @author pupil
  */
-public class CustomerManager {
+public class CustomerManager extends App{
+    
+    //get customers
+    public static ArrayList<Customer> getCustomers(){
+        return customers;
+    }
     
     //add customer to ArrayList and save to file
     public static boolean add(Customer customer){

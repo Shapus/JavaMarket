@@ -13,58 +13,88 @@ import utils.Print;
  *
  * @author pupil
  */
-public class Customer implements Serializable{
+public final class Customer extends User implements Serializable{
     
     //variables
-    private int id;
+    
     private String name;
     private double money;
+    private boolean registered = false;
     
     //constructors
     public Customer(String name){
-        this.id = this.hashCode();
-        this.name = name;
-        this.money = 1000;
+        super();
+        this.setName(name);
+        this.setMoney(money);
     }
     public Customer(Customer customer){
-        this.id = customer.id;
-        this.name = customer.name;
-        this.money = customer.money;
+        super();
+        this.setName(customer.getName());
+        this.setMoney(customer.getMoney());
+    }
+    public Customer(String login, String password, String name){
+        super(login, password, App.Role.USER);
+        this.setName(name);
+        this.setMoney(money);
+    }
+    public Customer(String login, String password, Customer customer){
+        super(login, password, App.Role.USER);
+        this.setName(customer.getName());
+        this.setMoney(customer.getMoney());
     }
     
     //toString
     @Override
     public String toString() {
-        return "Customer " + App.BLUE + id + App.RESET + ", " +
-                "name = " + App.BLUE + name + App.RESET + ", " +
-                "money = " + App.BLUE + money + App.RESET;
+        if(isRegistered()){
+            return "Customer("+App.BLUE+"ЗАРЕГИСТРИРОВАН"+App.RESET+")" + 
+                    "id = " + App.BLUE + id + App.RESET + ", " +
+                    "login = " + App.BLUE + login + App.RESET + ", " +
+                    "name = " + App.BLUE + name + App.RESET + ", " +
+                    "money = " + App.BLUE + money + App.RESET;
+        }
+        else{
+            return "Customer("+App.RED+"НЕ ЗАРЕГИСТРИРОВАН"+App.RESET+")" + 
+                    "id = " + App.BLUE + id + App.RESET + ", " +
+                    "login = НЕТ ИМЕНИ ПОЛЬЗОВАТЕЛЯ" + ", " +
+                    "name = " + App.BLUE + name + App.RESET + ", " +
+                    "money = " + App.BLUE + money + App.RESET;
+        }
     }
     
     //getters
-    public int getId() {
-        return id;
-    }
     public String getName() {
         return name;
     }
     public double getMoney() {
         return money;
     }
+    public boolean isRegistered() {
+        return registered;
+    }
     
     //setters
     public void setName(String name) {
-        this.name = name;
+        try{
+            if(name.isEmpty() || name.split(" ").length == 0 || name.split(" ").equals("")) throw new RuntimeException();
+            this.name = name;
+        }catch(RuntimeException e){
+            Print.errorln("Пустое название продукта");
+        }
     }
     //return true if value above zero, else return false
-    public boolean setMoney(float money) {
+    public boolean setMoney(double money) {
         try{
             if(money < 0) throw new NumberFormatException();
             this.money = money;
             return true;
         }catch(NumberFormatException e){
-            Print.error("Нельзя установить количество денег меньше нуля\nУстановлено зачение: 0");
+            Print.errorln("Нельзя установить количество денег меньше нуля\nУстановлено зачение: 0");
             this.money = 0;
             return false;
         }
+    }
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 }

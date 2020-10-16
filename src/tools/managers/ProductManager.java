@@ -9,13 +9,18 @@ import entity.Product;
 import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
-import static javamarket.App.products;
 
 /**
  *
  * @author pupil
  */
-public class ProductManager {
+public class ProductManager extends App{
+    
+    //get products
+    public static ArrayList<Product> getProducts(){
+        return products;
+    }
+    
     //add customer to ArrayList and save to file
     public static boolean add(Product product){
         products.add(product);
