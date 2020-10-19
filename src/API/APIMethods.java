@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userinterface;
+package API;
 
-import entity.Customer;
+import entity.Account;
 import entity.Product;
 import entity.User;
 import javamarket.App;
-import tools.managers.CustomerManager;
+import tools.managers.AccountManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
 import utils.Print;
@@ -19,7 +19,7 @@ import utils.Scan;
  *
  * @author pupil
  */
-public class API {
+public class APIMethods {
     //exit programm
     public static String exit(){
         Print.alert("Выйти из программы? y/n"," ");
@@ -42,48 +42,17 @@ public class API {
         }
     }
     
-    //add customer
-    public static void addCustomer(){
-        String customer_name = Scan.getString("Введите имя покупателя: ");
-        Customer customer = new Customer(customer_name);
-        boolean successAddCustomer = CustomerManager.add(customer);
-        if(successAddCustomer){
-            System.out.println(customer.toString() + " добавлен");
-        }
-        else{
-            Print.errorln("Не удалось зарегистрировать покупателя", " "+customer.toString());
-        }
-    }
-    
     //delete product
     public static void deleteProduct(){
         if(ProductManager.getProducts().size() > 0){
             try{
                 int product_index = Scan.getIndex(ProductManager.getProducts(), 1, "Выберите продукт для удаления: ");
-                Product productToDelete = ProductManager.getProducts().get(product_index-1);
+                Product productToDelete = (Product)ProductManager.getProducts().get(product_index-1);
                 if(ProductManager.delete(productToDelete)){
                     System.out.println(productToDelete.toString() + " удален");
                 }
                 else{
                     Print.errorln("Не удалось удалить продукт", " "+productToDelete.toString());
-                }
-            }catch(NumberFormatException e){
-                Print.errorln("Неверный индекс");
-            }
-        }
-    }
-    
-    //delete customer
-    public static void deleteCustomer(){
-        if(CustomerManager.getCustomers().size() > 0){
-            try{
-                int customer_index = Scan.getIndex(CustomerManager.getCustomers(), 1, "Выберите покупателя для удаления: ");
-                Customer customerToDelete = CustomerManager.getCustomers().get(customer_index-1);
-                if(CustomerManager.delete(customerToDelete)){
-                    System.out.println(customerToDelete.toString() + " удален");
-                }
-                else{
-                    Print.errorln("Не удалось удалить пользователя", " "+customerToDelete.toString());
                 }
             }catch(NumberFormatException e){
                 Print.errorln("Неверный индекс");
@@ -113,7 +82,7 @@ public class API {
     }
     
     //registeration
-    public static void registeration(){
+    public static void registration(){
         String login;
         String password;
         String confirmPassword;
@@ -150,4 +119,34 @@ public class API {
         UserManager.add(user);
         System.out.println(user.toString() + " зарегистрирован");
     }
+
+    static void buyProduct(User user) {
+        if(ProductManager.getProducts().size() > 0){
+            try{
+                Print.printList(ProductManager.getProducts());
+                int product_index = Scan.getIndex(ProductManager.getProducts(), 1, "Выберите продукт: ");
+                Product product = (Product)ProductManager.getProducts().get(product_index-1);
+                
+                //check deal is valid
+                if(user.getAccount().getMoney() < product.getCost()){
+                    Print.errorln("Недостаточно средств");
+                    return;
+                }
+                if(product.getQuantity() <= 0){
+                    Print.alertln("Продукта нет в наличии");
+                    return;
+                }
+                
+                user.getAccount().setMoney(user.getAccount().getMoney() - product.getCost());
+                product.setQuantity(product.getQuantity()-1);
+                System.out.println("Вы успешно купили продукт: "+product.toString());
+                    
+            }catch(NumberFormatException e){
+                Print.errorln("Неверный индекс");
+            }
+        }else{
+            Print.emptyMessage();
+        }
+    }
+    
 }

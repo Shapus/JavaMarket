@@ -17,7 +17,7 @@ import tools.files.FileManager;
 public class ProductManager extends App{
     
     //get products
-    public static ArrayList<Product> getProducts(){
+    public static ArrayList getProducts(){
         return products;
     }
     

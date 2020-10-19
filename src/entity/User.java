@@ -15,21 +15,19 @@ import javamarket.App.Role;
 public class User implements Serializable{
     
     //variables
-    protected int id;
-    protected String login;
-    protected String password;
-    protected Role role;
+    private int id;
+    private String login;
+    private String password;
+    private Role role;
+    private Account account;
     
     //constructors
-    public User(){
-        this.id = this.hashCode();
-        this.role = Role.USER;
-    };
     public User(String login, String password, Role role){
         this.id = this.hashCode();
         this.setLogin(login);
         this.setPassword(password);
         this.role = role;
+        account = new Account(1000d);
     }
     
     //to string
@@ -53,6 +51,9 @@ public class User implements Serializable{
     public Role getRole() {
         return role;
     }
+    public Account getAccount() {
+        return account;
+    }
     
     //setters
     public final void setLogin(String login) {
@@ -60,6 +61,9 @@ public class User implements Serializable{
     }
     public final void setPassword(String password) {
         this.password = password;
+    }
+    public void setAccount(Account account) {
+        this.account = account;
     }
     
 }

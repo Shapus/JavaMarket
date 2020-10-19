@@ -5,18 +5,14 @@
  */
 package javamarket;
 
-import entity.Customer;
+import API.APIInterface;
+import entity.Account;
 import entity.Deal;
 import entity.Product;
 import entity.User;
 import java.util.ArrayList;
 import tools.files.FileManager;
-import userinterface.API;
-import tools.managers.CustomerManager;
-import tools.managers.DealManager;
-import tools.managers.ProductManager;
-import utils.Print;
-import utils.Scan;
+import security.Security;
 
 /**
  *
@@ -24,12 +20,16 @@ import utils.Scan;
  */
 public class App {
     
+    //security class
+    Security security;
+    User user;
+    
     //user roles
     public static enum Role{GUEST, USER, ADMIN};
     
     //file paths
     public static String DIRECTORY_PATH = "data\\";
-    public static String CUSTOMERS_FILE_PATH = "customers.txt";
+    public static String ACCOUNTS_FILE_PATH = "accounts.txt";
     public static String PRODUCTS_FILE_PATH = "products.txt";
     public static String DEALS_FILE_PATH = "deals.txt";
     public static String USERS_FILE_PATH = "users.txt";
@@ -47,65 +47,32 @@ public class App {
     
     
     //market data
-    protected static ArrayList<Customer> customers;
+    protected static ArrayList<Account> accounts;
     protected static ArrayList<Product> products;
     protected static ArrayList<Deal> deals;
     protected static ArrayList<User> users;
-    public static String[] taskList = {
-                        "Выйти из программы",
-                        "Добавить продукт",
-                        "Добавить покупателя",
-                        "Список продуктов",
-                        "Список покупателей",
-                        "Удалить продукт",
-                        "Удалить покупателя",
-                        "Продать",
-                        "Посмотреть последнюю запись",
-                        "Посмотреть последние n записей",
-                        "Посмотреть все записи"
-                        };
+    
+    
+    public static String[] taskList;
     private int operation;
     private String exit;
     
     
     public void run(){
         FileManager.loadAll();
-        exit = "n";
-        System.out.println("------ МАГАЗИН ------");
-        while(exit.equals("n")){
-            Print.printList(taskList);
-            operation = Scan.getOperation(taskList);
-            if(operation != -1){
-                Print.alertln(taskList[operation]);
-            }
-            switch (operation) {
-                case 0:                
-                    exit = API.exit();
-                    break;
-                case 1:     
-                    API.addProduct();
-                    break;
-                case 2:   
-                    API.addCustomer();
-                    break;
-                case 3:   
-                    Print.printList(products);
-                    break;
-                case 4:    
-                    Print.printList(customers);
-                    break;
-                case 5:   
-                    Print.printList(products);
-                    API.deleteProduct();
-                    break;
-                case 6:    
-                    Print.printList(customers);
-                    API.deleteCustomer();
-                    break;
-                default:
-                    Print.errorln("Нет такой операции");
-            }
-            System.out.print("\n\n");
+        //init security system
+        security = new Security();
+        user = security.run();
+        if(user == null){
+            
+        }
+        else if(user.getRole() == Role.USER){
+            System.out.println("user");
+            APIInterface.userInterface(user);
+        }
+        else if(user.getRole() == Role.ADMIN){
+            System.out.println("admin");
+            APIInterface.adminInterface(user);
         }
         FileManager.saveAll();
     }

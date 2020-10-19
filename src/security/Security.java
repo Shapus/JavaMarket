@@ -7,11 +7,12 @@ package security;
 
 import entity.User;
 import tools.files.FileManager;
-import tools.managers.CustomerManager;
+import tools.managers.AccountManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
-import userinterface.API;
+import API.APIMethods;
+import javamarket.App;
 import utils.Print;
 import utils.Scan;
 
@@ -20,40 +21,48 @@ import utils.Scan;
  * @author pupil
  */
 public class Security {
-    public User user;
+    private User user;
     private String[] taskList = {
                     "Выйти из программы",
                     "Войти",
                     "Зарегистрироваться",
-                    "Породолжить как гость"
                     };
     private int operation;
-    public void run(){
-        FileManager.loadAll();
-        Print.printList(taskList);
-        operation = Scan.getOperation(taskList);
-        if(operation != -1){
-            Print.alertln(taskList[operation]);
+    private String exit;
+    public User run(){
+        exit = "n";
+        while(user == null && exit != "y"){
+            Print.printList(taskList);
+            operation = Scan.getOperation(taskList);
+            if(operation != -1){
+                Print.alertln(taskList[operation]);
+            }
+
+            switch (operation) {
+                case 0:
+                    exit = APIMethods.exit();
+                    break;
+                case 1:
+                    user = APIMethods.login();
+                    if(checkUser(user)){
+                        System.out.println("Здравствуйте, " + user.getLogin());
+                        System.out.println("++++++++++++++++++++++++++++++++++++++++++ВХОД В СИСТЕМУ++++++++++++++++++++++++++++++++++++++++++");
+                    }else{
+                        Print.errorln("Неверно введен логин и/или пароль");
+                    }
+                    break;
+                case 2:
+                    APIMethods.registration();
+                    break;
+                default:
+                    Print.error("Нет такой операции");
+            }
         }
-        
-        switch (operation) {
-            case 0:
-                API.exit();
-                break;
-            case 1:
-                user = API.login();
-                break;
-            case 2:
-                API.registeration();
-                break;
-            case 3:
-                
-                break;
-            default:
-                Print.error("Нет такой операции");
-        }
+        return user;
     }
     
-
+    private boolean checkUser(User user){
+        return user != null;
+    }
     
 }

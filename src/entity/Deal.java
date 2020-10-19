@@ -18,19 +18,19 @@ public class Deal implements Serializable {
     //variables
     private final int id;
     private final Date date;
-    private final Customer customer;
+    private final Account customer;
     private final Product product;
     private final int quantity;
     
     //costructors
-    public Deal(int id, int date, Customer customer, Product product){
+    public Deal(int id, int date, Account customer, Product product){
         this.id = this.hashCode();
         this.date = new Date();
         this.customer = customer;
         this.product = product;
         this.quantity = 1;
     }
-    public Deal(int id, int date, Customer customer, Product product, int quantity){
+    public Deal(int id, int date, Account customer, Product product, int quantity){
         this.id = this.hashCode();
         this.date = new Date();
         this.customer = customer;
@@ -55,7 +55,7 @@ public class Deal implements Serializable {
     public Date getDate() {
         return date;
     }
-    public Customer getCustomer() {
+    public Account getCustomer() {
         return customer;
     }
     public Product getProduct() {

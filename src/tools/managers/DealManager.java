@@ -6,6 +6,8 @@
 package tools.managers;
 
 import entity.Deal;
+import entity.Product;
+import entity.User;
 import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
@@ -17,7 +19,7 @@ import tools.files.FileManager;
 public class DealManager extends App{
         
     //get deals
-    public static ArrayList<Deal> getDeals(){
+    public static ArrayList getDeals(){
         return deals;
     }
     
@@ -39,4 +41,27 @@ public class DealManager extends App{
     public static boolean save(){
         return FileManager.saveToFile(deals, App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
     }
+    public static ArrayList getLastDeal(){
+        ArrayList<Deal> lastDeal = new ArrayList();
+        if(deals.size() > 0){
+            lastDeal.add(deals.get(deals.size()-1));
+        }
+        return lastDeal;
+    }
+    public static ArrayList getLastDeals(int count){
+        ArrayList<Deal> lastDeals = new ArrayList();
+        if(deals.size() > count){
+            for(int i=deals.size()-count;i<deals.size();i++){
+                lastDeals.add(deals.get(i));
+            }
+        }
+        else{
+            for(Deal d : deals){
+                lastDeals.add(d);
+            }
+        }
+        return lastDeals;
+    }
+    
+
 }

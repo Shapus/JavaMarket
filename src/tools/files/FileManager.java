@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import tools.managers.CustomerManager;
+import tools.managers.AccountManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
@@ -85,14 +85,14 @@ public class FileManager {
     //save all
     public static void saveAll(){
         ProductManager.save();
-        CustomerManager.save();
+        AccountManager.save();
         DealManager.save();
     }
     
    //load all
    public static void loadAll(){
         ProductManager.load();
-        CustomerManager.load();
+        AccountManager.load();
         DealManager.load();
         UserManager.load();
     }
