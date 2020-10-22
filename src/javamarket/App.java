@@ -5,7 +5,7 @@
  */
 package javamarket;
 
-import API.APIInterface;
+import UI.Interface;
 import entity.Account;
 import entity.Deal;
 import entity.Product;
@@ -13,6 +13,8 @@ import entity.User;
 import java.util.ArrayList;
 import tools.files.FileManager;
 import security.Security;
+import tools.managers.UserManager;
+import utils.Print;
 
 /**
  *
@@ -25,7 +27,7 @@ public class App {
     User user;
     
     //user roles
-    public static enum Role{GUEST, USER, ADMIN};
+    public static enum Role{GUEST, USER, ADMIN, BANK};
     
     //file paths
     public static String DIRECTORY_PATH = "data\\";
@@ -54,25 +56,49 @@ public class App {
     
     
     public static String[] taskList;
-    private int operation;
-    private String exit;
-    
+    private boolean runApp;
     
     public void run(){
         FileManager.loadAll();
+        boolean existAdmin = false;
+        boolean existBank = false;
+        int i = 0;
+        User user;
+        while(!existAdmin && ! existBank){
+            user = users.get(i);
+            if(user.getRole() == Role.ADMIN){
+                existAdmin = true;
+            }
+            if(user.getRole() == Role.ADMIN){
+                existBank = true;
+            }
+        }
+        if(!existAdmin){
+            UserManager.addAdmin();
+        }
+        if(!existBank){
+            UserManager.addBank();
+        }
         //init security system
-        security = new Security();
-        user = security.run();
-        if(user == null){
-            
-        }
-        else if(user.getRole() == Role.USER){
-            System.out.println("user");
-            APIInterface.userInterface(user);
-        }
-        else if(user.getRole() == Role.ADMIN){
-            System.out.println("admin");
-            APIInterface.adminInterface(user);
+        
+        runApp = true;
+        while(runApp){
+            security = new Security();
+            user = security.run();
+            if(user == null){
+                runApp = false;
+            }
+            else if(user.getRole() == Role.GUEST){
+                
+            }
+            else if(user.getRole() == Role.USER){
+                System.out.println("user");
+                runApp = Interface.userInterface(user);
+            }
+            else if(user.getRole() == Role.ADMIN){
+                System.out.println("admin");
+                runApp = Interface.adminInterface(user);
+            }
         }
         FileManager.saveAll();
     }

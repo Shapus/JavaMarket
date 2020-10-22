@@ -22,7 +22,10 @@ public final class Product implements Serializable {
     private int quantity;
     
     //constructors
-    public Product(String name, double price, int quantity){
+    public Product(){
+        this.id = this.hashCode();
+    };
+    public Product(String name, double price, int quantity) throws RuntimeException{
         this.id = this.hashCode();
         this.setName(name);
         this.setPrice(price);
@@ -56,36 +59,28 @@ public final class Product implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    public void setName(String name) {
-        try{
-            if(name.isEmpty() || name.split(" ").length == 0 || name.split(" ").equals("")) throw new RuntimeException();
-            this.name = name;
-        }catch(RuntimeException e){
-            Print.errorln("Пустое имя пользователя");
+    public void setName(String name){
+        if(name.isEmpty() || name.split(" ").length == 0 || name.split(" ").equals("")){
+            Print.errorln("Неверное имя продукта");
+            throw new RuntimeException();
         }
+        this.name = name;
     }
     //return true if value above zero, else return false
-    public boolean setPrice(double cost) {
-        try{
-            if(cost < 0) throw new NumberFormatException();
-            this.price = cost;
-            return true;
-        }catch(NumberFormatException e){
-            Print.errorln("Нельзя установить стоимость продукта меньше нуля\nУстановлена стоимость 1");
-            this.price = 1;
-            return false;
+    public void setPrice(double cost){
+        if(cost <= 0){
+            Print.errorln("Неверная цена");
+            throw new RuntimeException();
         }
+        this.price = cost;
     }
     //return true if value above zero, else return false
-    public boolean setQuantity(int quantity){
-        try{
-            if(quantity < 0) throw new NumberFormatException();
-            this.quantity = quantity;
-            return true;
-        }catch(NumberFormatException e){
-            Print.errorln("Нельзя установить количество продукта меньше нуля");
-            return false;
+    public void setQuantity(int quantity){
+        if(quantity < 0){
+            Print.errorln("Неверное количество");
+            throw new RuntimeException();
         }
+        this.quantity = quantity;
     }
     
 }

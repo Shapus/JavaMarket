@@ -26,7 +26,7 @@ public class DealManager extends App{
     //add customer to ArrayList and save to file
     public static boolean add(Deal deal){
         deals.add(deal);
-        return save();
+        return saveNLoad();
     }
     
     //load customers ArrayList from file
@@ -62,6 +62,11 @@ public class DealManager extends App{
         }
         return lastDeals;
     }
-    
+    private static boolean saveNLoad(){
+        boolean out;
+        out = save();
+        load();
+        return out;
+    }
 
 }

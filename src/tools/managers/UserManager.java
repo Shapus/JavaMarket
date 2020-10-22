@@ -15,7 +15,7 @@ import tools.files.FileManager;
  * @author pupil
  */
 public class UserManager extends App{
-    
+    private static User guest = new User("","", Role.GUEST);
     //get products
     public static ArrayList<User> getUsers(){
         return users;
@@ -24,13 +24,29 @@ public class UserManager extends App{
     //add user to ArrayList and save to file
     public static boolean add(User user){
         users.add(user);
-        return save();
+        return saveNLoad();
     }
+    
+    //get guest
+    public static User getGuest(){
+        return guest;
+    }
+    //add user to ArrayList and save to file
+    public static boolean addAdmin(){
+        users.add(new User("admin", "admin", App.Role.ADMIN));
+        return saveNLoad();
+    }
+    //add user to ArrayList and save to file
+    public static boolean addBank(){
+        users.add(new User("bank", "bank", App.Role.BANK));
+        return saveNLoad();
+    }
+    
     
     //delete user from ArrayList
     public static boolean delete(User user){
         users.remove(user);
-        return save();
+        return saveNLoad();
     }
     //delete user from ArrayList with id
     public static boolean delete(int id){
@@ -42,7 +58,7 @@ public class UserManager extends App{
             }
         }
         users.remove(user);
-        return save();
+        return saveNLoad();
     }
     
     //load users ArrayList from file
@@ -53,5 +69,12 @@ public class UserManager extends App{
     //save users ArrayList to file
     public static boolean save(){
         return FileManager.saveToFile(users, App.DIRECTORY_PATH+App.USERS_FILE_PATH);
+    }
+    
+    private static boolean saveNLoad(){
+        boolean out;
+        out = save();
+        load();
+        return out;
     }
 }

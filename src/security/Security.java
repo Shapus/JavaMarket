@@ -6,13 +6,8 @@
 package security;
 
 import entity.User;
-import tools.files.FileManager;
-import tools.managers.AccountManager;
-import tools.managers.DealManager;
-import tools.managers.ProductManager;
+import UI.UIMethods;
 import tools.managers.UserManager;
-import API.APIMethods;
-import javamarket.App;
 import utils.Print;
 import utils.Scan;
 
@@ -31,7 +26,8 @@ public class Security {
     private String exit;
     public User run(){
         exit = "n";
-        while(user == null && exit != "y"){
+        user = UserManager.getGuest();
+        while(exit != "y"){
             Print.printList(taskList);
             operation = Scan.getOperation(taskList);
             if(operation != -1){
@@ -40,29 +36,25 @@ public class Security {
 
             switch (operation) {
                 case 0:
-                    exit = APIMethods.exit();
-                    break;
+                    return null;
                 case 1:
-                    user = APIMethods.login();
+                    user = UIMethods.login();
                     if(checkUser(user)){
-                        System.out.println("Здравствуйте, " + user.getLogin());
-                        System.out.println("++++++++++++++++++++++++++++++++++++++++++ВХОД В СИСТЕМУ++++++++++++++++++++++++++++++++++++++++++");
+                        return user;
                     }else{
                         Print.errorln("Неверно введен логин и/или пароль");
                     }
                     break;
                 case 2:
-                    APIMethods.registration();
+                    UIMethods.registration();
                     break;
-                default:
-                    Print.error("Нет такой операции");
             }
         }
         return user;
     }
     
     private boolean checkUser(User user){
-        return user != null;
+        return user != UserManager.getGuest();
     }
     
 }

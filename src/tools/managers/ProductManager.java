@@ -9,6 +9,7 @@ import entity.Product;
 import java.util.ArrayList;
 import javamarket.App;
 import tools.files.FileManager;
+import utils.Print;
 
 /**
  *
@@ -24,13 +25,13 @@ public class ProductManager extends App{
     //add customer to ArrayList and save to file
     public static boolean add(Product product){
         products.add(product);
-        return save();
+        return saveNLoad();
     }
     
     //delete customer from ArrayList
     public static boolean delete(Product product){
         products.remove(product);
-        return save();
+        return saveNLoad();
     }
     //delete customer from ArrayList with id
     public static boolean delete(int id){
@@ -42,19 +43,27 @@ public class ProductManager extends App{
             }
         }
         products.remove(customer);
-        return save();
+        return saveNLoad();
     }
     
     public static boolean increaseQuantity(Product product, int count){
-        boolean setQuantity = product.setQuantity(product.getQuantity()+count);
-        if(!setQuantity) return setQuantity;
-        return save();
+        try{
+            product.setQuantity(product.getQuantity()+count);
+            return saveNLoad();
+        }catch(RuntimeException e){
+            Print.errorln("Не удалось увеличить количество");
+            return false;
+        }
     }
     
     public static boolean decreaseQuantity(Product product, int count){
-        boolean out = product.setQuantity(product.getQuantity()-count);
-        save();
-        return out;
+        try{
+            product.setQuantity(product.getQuantity()-count);
+            return saveNLoad();
+        }catch(RuntimeException e){
+            Print.errorln("Не удалось увеличить количество");
+            return false;
+        }
     }
     
     //load customers ArrayList from file
@@ -68,6 +77,12 @@ public class ProductManager extends App{
     //save customers ArrayList to file
     public static boolean save(){
         return FileManager.saveToFile(products, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+    }
+    private static boolean saveNLoad(){
+        boolean out;
+        out = save();
+        load();
+        return out;
     }
 }
 

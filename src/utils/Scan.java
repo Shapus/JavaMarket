@@ -19,26 +19,24 @@ public class Scan{
     public static Scanner scanner = new Scanner(System.in);
     
     //get integer
-    public static int getInt(String str){
+    public static int getInt(String str) throws RuntimeException{
         try{
             System.out.print(str);
             String iStr = scanner.nextLine();
             int i = Integer.parseInt(iStr);
             return i;
         }catch(NumberFormatException e){
-            Print.errorln("Неверный ввод");
+            throw new RuntimeException();
         }
-        return 0;
     }
-    public static int getInt(){
+    public static int getInt() throws RuntimeException{
         try{
             String iStr = scanner.nextLine();
             int i = Integer.parseInt(iStr);
             return i;
         }catch(NumberFormatException e){
-            Print.errorln("Неверный ввод");
+            throw new RuntimeException();
         }
-        return 0;
     }
     
     
@@ -54,26 +52,24 @@ public class Scan{
     }
     
     //get double
-    public static double getDouble(String str){
+    public static double getDouble(String str) throws RuntimeException{
         try{
             System.out.print(str);
             String iStr = scanner.nextLine();
             double d = Double.parseDouble(iStr);
             return d;
         }catch(NumberFormatException e){
-            Print.errorln("Неверный ввод");
+            throw new RuntimeException();
         }
-        return 0;
     }
-    public static double getDouble(){
+    public static double getDouble() throws RuntimeException{
         try{
             String iStr = scanner.nextLine();
             double d = Double.parseDouble(iStr);
             return d;
         }catch(NumberFormatException e){
-            Print.errorln("Неверный ввод");
+            throw new RuntimeException();
         }
-        return 0;
     }
     
     //get ArrayList/String[] index. If index above array size or less zero, throw NumberFormatException
@@ -95,10 +91,11 @@ public class Scan{
         int operation = -1;
         try{
             operation = Scan.getIndex(list, 0, "Введите номер операции: ");
-        }catch(NumberFormatException e){
+            return operation;
+        }catch(RuntimeException e){
             Print.errorln("Операция введена неверно");
-            operation = -1;
+            return -1;
         }
-        return operation;
+        
     }
 }

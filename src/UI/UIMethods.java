@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package API;
+package UI;
 
 import entity.Account;
 import entity.Product;
 import entity.User;
 import javamarket.App;
-import tools.managers.AccountManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
 import utils.Print;
@@ -19,7 +18,7 @@ import utils.Scan;
  *
  * @author pupil
  */
-public class APIMethods {
+public class UIMethods {
     //exit programm
     public static String exit(){
         Print.alert("Выйти из программы? y/n"," ");
@@ -29,16 +28,24 @@ public class APIMethods {
     
     //add product
     public static void addProduct(){
-        String product_name = Scan.getString("Введите название продукта: ");
-        double product_price = Scan.getDouble("Введите стоимоть продукта: ");
-        int product_quantity = Scan.getInt("Введите количество: ");
-        Product product = new Product(product_name, product_price, product_quantity);
-        boolean successAddProduct = ProductManager.add(product);
-        if(successAddProduct){
-            System.out.println(product.toString() + " добавлен");
-        }
-        else{
-            Print.errorln("Не удалось добавить продукт", " "+product.toString());
+        try{
+            Product product = new Product();
+            String product_name = Scan.getString("Введите название продукта: ");
+            product.setName(product_name);
+            double product_price = Scan.getDouble("Введите стоимоть продукта: ");
+            product.setPrice(product_price);
+            int product_quantity = Scan.getInt("Введите количество: ");
+            product.setQuantity(product_quantity);
+            boolean successAddProduct = ProductManager.add(product);
+            if(successAddProduct){
+                System.out.println(product.toString() + " добавлен");
+            }
+            else{
+                Print.errorln("Не удалось добавить продукт");
+            }
+        }catch(RuntimeException e){
+            System.out.println();
+            Print.errorln("Не удалось добавить продукт");
         }
     }
     
@@ -64,7 +71,7 @@ public class APIMethods {
     public static User login(){
         String login;
         String password;
-        User user = null;
+        User user = UserManager.getGuest();
             
         Print.alert("Имя пользователя:", " ");
         login = Scan.getString();
@@ -117,7 +124,7 @@ public class APIMethods {
         //success registration
         user = new User(login, password, App.Role.USER);
         UserManager.add(user);
-        System.out.println(user.toString() + " зарегистрирован");
+        System.out.println("Пользователь зарегистрирован");
     }
 
     static void buyProduct(User user) {

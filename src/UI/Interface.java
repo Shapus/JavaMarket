@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package API;
+package UI;
 
 import entity.User;
-import static javamarket.App.taskList;
-import tools.managers.AccountManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
+import tools.managers.UserManager;
 import utils.Print;
 import utils.Scan;
 
@@ -18,13 +17,14 @@ import utils.Scan;
  * @author pupil
  */
 
-public class APIInterface{
+public class Interface{
     //variables
     private static User user;
     private static String exit;
     private static int operation;
     public static String[] adminTaskList = {
                         "Выйти из программы",
+                        "Выйти из учетной записи",
                         "Добавить продукт",
                         "Список продуктов",
                         "Удалить продукт",
@@ -34,13 +34,14 @@ public class APIInterface{
                         };
     public static String[] userTaskList = {
                         "Выйти из программы",
+                        "Выйти из учетной записи",
                         "Список продуктов",
                         "Купить продукт"
                         };
     
     //admin interface
-    public static void adminInterface(User user){
-        APIInterface.user = user;
+    public static boolean adminInterface(User user){
+        Interface.user = user;
         exit = "n";
         while(exit.equals("n")){
             Print.printList(adminTaskList);
@@ -50,39 +51,40 @@ public class APIInterface{
             }
             switch (operation) {
                 case 0:                
-                    exit = APIMethods.exit();
+                    exit = UIMethods.exit();
                     break;
-                case 1:     
-                    APIMethods.addProduct();
-                    break;
-                case 2:   
-                    Print.printList(ProductManager.getProducts());
+                case 1:                
+                    return true;
+                case 2:     
+                    UIMethods.addProduct();
                     break;
                 case 3:   
                     Print.printList(ProductManager.getProducts());
-                    APIMethods.deleteProduct();
                     break;
-                case 4:
-                    Print.printList(DealManager.getLastDeal());
+                case 4:   
+                    Print.printList(ProductManager.getProducts());
+                    UIMethods.deleteProduct();
                     break;
                 case 5:
+                    Print.printList(DealManager.getLastDeal());
+                    break;
+                case 6:
                     int count = Scan.getInt("Введите количество записей: ");
                     Print.printList(DealManager.getLastDeals(count));
                     break;
-                case 6:
+                case 7:
                     Print.printList(DealManager.getDeals());
                     break;
                 default:
-                    Print.errorln("Нет такой операции");
             }
             System.out.print("\n\n");
         }
-        
+        return false;
     }
     
     //user interface
-    public static void userInterface(User user){
-        APIInterface.user = user;
+    public static boolean userInterface(User user){
+        Interface.user = user;
         exit = "n";
         while(exit.equals("n")){
             Print.printList(userTaskList);
@@ -92,18 +94,20 @@ public class APIInterface{
             }
             switch (operation) {
                 case 0:                
-                    exit = APIMethods.exit();
+                    exit = UIMethods.exit();
                     break;
-                case 1:     
+                case 1:                
+                    return true;
+                case 2:     
                     Print.printList(ProductManager.getProducts());
                     break;
-                case 2:   
-                    APIMethods.buyProduct(user);
+                case 3:   
+                    UIMethods.buyProduct(user);
                     break;
                 default:
-                    Print.errorln("Нет такой операции");
             }
             System.out.print("\n\n");
         }
+        return false;
     }
 }
