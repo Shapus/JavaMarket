@@ -9,6 +9,7 @@ import entity.Account;
 import entity.Product;
 import entity.User;
 import javamarket.App;
+import tools.managers.AccountManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
 import utils.Print;
@@ -123,6 +124,7 @@ public class UIMethods {
         
         //success registration
         user = new User(login, password, App.Role.USER);
+        user.setAccount(AccountManager.newAccount());
         UserManager.add(user);
         System.out.println("Пользователь зарегистрирован");
     }
@@ -132,23 +134,50 @@ public class UIMethods {
             try{
                 Print.printList(ProductManager.getProducts());
                 int product_index = Scan.getIndex(ProductManager.getProducts(), 1, "Выберите продукт: ");
-                Product product = (Product)ProductManager.getProducts().get(product_index-1);
+                Product product = ProductManager.getProducts().get(product_index-1);   
+                if(UserManager.buy(user, product)){
+                    System.out.println("Вы успешно купили продукт: "+product.toString());
+                }     
+            }catch(RuntimeException e){
+                Print.errorln("Неверный индекс");
+            }
+        }else{
+            Print.emptyMessage();
+        }
+    }
+    
+    static void giveMoney(){
+        if(AccountManager.getAccounts().size() > 0){
+            try{
+                Print.printList(AccountManager.getAccounts());
+                int account_index = Scan.getIndex(AccountManager.getAccounts(), 1, "Выберите счет: ");
+                Account account = (Account)AccountManager.getAccounts().get(account_index-1);
                 
-                //check deal is valid
-                if(user.getAccount().getMoney() < product.getCost()){
-                    Print.errorln("Недостаточно средств");
-                    return;
-                }
-                if(product.getQuantity() <= 0){
-                    Print.alertln("Продукта нет в наличии");
-                    return;
-                }
+                double money = Scan.getDouble("Введите сумму: ");
+                account.setMoney(account.getMoney() + money);
+                AccountManager.saveNLoad();
+                UserManager.saveNLoad();
+                System.out.println("Текущий баланс счета: "+account.getMoney());       
+            }catch(RuntimeException e){
+                Print.errorln("Неверный индекс");
+            }
+        }else{
+            Print.emptyMessage();
+        }
+    }
+    
+    static void increaseProductQuantity(){
+        if(ProductManager.getProducts().size() > 0){
+            try{
+                Print.printList(ProductManager.getProducts());
+                int product_index = Scan.getIndex(ProductManager.getProducts(), 1, "Выберите продукт: ");
+                Product product = ProductManager.getProducts().get(product_index-1);
                 
-                user.getAccount().setMoney(user.getAccount().getMoney() - product.getCost());
-                product.setQuantity(product.getQuantity()-1);
-                System.out.println("Вы успешно купили продукт: "+product.toString());
-                    
-            }catch(NumberFormatException e){
+                int quantity = Scan.getInt("Введите количество: ");
+                ProductManager.increaseQuantity(product, quantity);
+                ProductManager.saveNLoad();
+                System.out.println("Текущее количество: "+product.getQuantity());       
+            }catch(RuntimeException e){
                 Print.errorln("Неверный индекс");
             }
         }else{

@@ -64,12 +64,13 @@ public class App {
         boolean existBank = false;
         int i = 0;
         User user;
-        while(!existAdmin && ! existBank){
+        while(!existAdmin && ! existBank && i<users.size()){
             user = users.get(i);
+            i++;
             if(user.getRole() == Role.ADMIN){
                 existAdmin = true;
             }
-            if(user.getRole() == Role.ADMIN){
+            if(user.getRole() == Role.BANK){
                 existBank = true;
             }
         }
@@ -91,12 +92,13 @@ public class App {
             else if(user.getRole() == Role.GUEST){
                 
             }
+            else if(user.getRole() == Role.BANK){
+                runApp = Interface.bankInterface(user);
+            }
             else if(user.getRole() == Role.USER){
-                System.out.println("user");
                 runApp = Interface.userInterface(user);
             }
             else if(user.getRole() == Role.ADMIN){
-                System.out.println("admin");
                 runApp = Interface.adminInterface(user);
             }
         }

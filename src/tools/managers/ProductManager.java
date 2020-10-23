@@ -18,7 +18,7 @@ import utils.Print;
 public class ProductManager extends App{
     
     //get products
-    public static ArrayList getProducts(){
+    public static ArrayList<Product> getProducts(){
         return products;
     }
     
@@ -61,7 +61,7 @@ public class ProductManager extends App{
             product.setQuantity(product.getQuantity()-count);
             return saveNLoad();
         }catch(RuntimeException e){
-            Print.errorln("Не удалось увеличить количество");
+            Print.errorln("Не удалось изменить количество");
             return false;
         }
     }
@@ -78,7 +78,7 @@ public class ProductManager extends App{
     public static boolean save(){
         return FileManager.saveToFile(products, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
     }
-    private static boolean saveNLoad(){
+    public static boolean saveNLoad(){
         boolean out;
         out = save();
         load();

@@ -17,8 +17,20 @@ import tools.files.FileManager;
 public class AccountManager extends App{
     
     //get accounts
-    public static ArrayList getAccounts(){
+    public static ArrayList<Account> getAccounts(){
         return accounts;
+    }
+    
+    //delete account from ArrayList with id
+    public static Account getAccount(long id){
+        Account account = null;
+        for(Account c : accounts){
+            if(c.hashCode() == id){
+                account = c;
+                break;
+            }
+        }
+        return account;
     }
     
     //add account to ArrayList and save to file
@@ -30,13 +42,13 @@ public class AccountManager extends App{
     //delete account from ArrayList
     public static boolean delete(Account account){
         accounts.remove(account);
-        return save();
+        return saveNLoad();
     }
     //delete account from ArrayList with id
     public static boolean delete(int id){
         Account account = null;
         for(Account c : accounts){
-            if(c.getId() == id){
+            if(c.hashCode() == id){
                 account = c;
                 break;
             }
@@ -44,7 +56,11 @@ public class AccountManager extends App{
         accounts.remove(account);
         return saveNLoad();
     }
-    
+    public static long newAccount(){
+        Account account = new Account(1000d);
+        add(account);
+        return accounts.get(accounts.size()-1).getId();
+    }
     //give money to account
     public static boolean giveMoney(Account account, double money) throws RuntimeException{
         boolean out;
@@ -64,7 +80,7 @@ public class AccountManager extends App{
     public static boolean save(){
         return FileManager.saveToFile(accounts, App.DIRECTORY_PATH+App.ACCOUNTS_FILE_PATH);
     }
-    private static boolean saveNLoad(){
+    public static boolean saveNLoad(){
         boolean out;
         out = save();
         load();

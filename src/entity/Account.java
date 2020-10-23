@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Random;
 import javamarket.App;
 import utils.Print;
 
@@ -16,12 +17,11 @@ import utils.Print;
 public class Account implements Serializable{
     
     //variables
-    protected int number;
+    long id = System.currentTimeMillis()/new Random().nextInt();
     protected double money;
     
     //constructors
     public Account(Double money){
-        this.number = this.hashCode();
         this.setMoney(money);
     }
     
@@ -29,16 +29,16 @@ public class Account implements Serializable{
     @Override
     public String toString() {
         return "Account{" + 
-                "id = " + App.BLUE + number + App.RESET + ", " +
+                "hash = " + App.BLUE + hashCode() + App.RESET + ", " +
                 "money = " + App.BLUE + money + App.RESET + "}";
     }
     
     //getters
-    public int getId() {
-        return number;
-    }
     public double getMoney() {
         return money;
+    }
+    public long getId(){
+        return id;
     }
     
     //return true if value above zero, else return false
@@ -48,9 +48,9 @@ public class Account implements Serializable{
             this.money = money;
             return true;
         }catch(NumberFormatException e){
-            Print.errorln("Нельзя установить количество денег меньше нуля\nУстановлено зачение: 0");
-            this.money = 0;
+            Print.errorln("Нельзя установить количество денег меньше нуля");
             return false;
         }
     }
+    
 }

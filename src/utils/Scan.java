@@ -76,12 +76,12 @@ public class Scan{
     //Should rewrite with generics
     public static int getIndex(ArrayList list, int shift, String str){
         int index = getInt(str);
-        if(index > list.size()-1+shift || index < shift) throw new NumberFormatException();
+        if(index > list.size()-1+shift || index < shift) throw new RuntimeException();
         return index;
     }
     public static int getIndex(String[] list, int shift, String str){
         int index = getInt(str);
-        if(index > list.length-1+shift || index < shift) throw new NumberFormatException();
+        if(index > list.length-1+shift || index < shift) throw new RuntimeException();
         return index;
     }
     

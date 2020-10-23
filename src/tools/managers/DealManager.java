@@ -19,7 +19,7 @@ import tools.files.FileManager;
 public class DealManager extends App{
         
     //get deals
-    public static ArrayList getDeals(){
+    public static ArrayList<Deal> getDeals(){
         return deals;
     }
     
@@ -62,7 +62,7 @@ public class DealManager extends App{
         }
         return lastDeals;
     }
-    private static boolean saveNLoad(){
+    public static boolean saveNLoad(){
         boolean out;
         out = save();
         load();

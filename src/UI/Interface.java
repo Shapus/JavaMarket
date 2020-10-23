@@ -5,7 +5,9 @@
  */
 package UI;
 
+import entity.Account;
 import entity.User;
+import tools.managers.AccountManager;
 import tools.managers.DealManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
@@ -26,6 +28,7 @@ public class Interface{
                         "Выйти из программы",
                         "Выйти из учетной записи",
                         "Добавить продукт",
+                        "Изменить количество",
                         "Список продуктов",
                         "Удалить продукт",
                         "Посмотреть последнюю запись",
@@ -36,9 +39,15 @@ public class Interface{
                         "Выйти из программы",
                         "Выйти из учетной записи",
                         "Список продуктов",
-                        "Купить продукт"
+                        "Купить продукт",
+                        "Текущий счет"
                         };
-    
+    public static String[] bankTaskList = {
+                        "Выйти из программы",
+                        "Выйти из учетной записи",
+                        "Список счетов",
+                        "Выдать деньги"
+                        };
     //admin interface
     public static boolean adminInterface(User user){
         Interface.user = user;
@@ -58,21 +67,24 @@ public class Interface{
                 case 2:     
                     UIMethods.addProduct();
                     break;
-                case 3:   
-                    Print.printList(ProductManager.getProducts());
+                case 3:     
+                    UIMethods.increaseProductQuantity();
                     break;
                 case 4:   
                     Print.printList(ProductManager.getProducts());
+                    break;
+                case 5:   
+                    Print.printList(ProductManager.getProducts());
                     UIMethods.deleteProduct();
                     break;
-                case 5:
+                case 6:
                     Print.printList(DealManager.getLastDeal());
                     break;
-                case 6:
+                case 7:
                     int count = Scan.getInt("Введите количество записей: ");
                     Print.printList(DealManager.getLastDeals(count));
                     break;
-                case 7:
+                case 8:
                     Print.printList(DealManager.getDeals());
                     break;
                 default:
@@ -103,6 +115,42 @@ public class Interface{
                     break;
                 case 3:   
                     UIMethods.buyProduct(user);
+                    break;
+                case 4:   
+                    for(Account acc : AccountManager.getAccounts()){
+                        if(acc.getId() == user.getAccount()){
+                            System.out.println(acc);
+                        }
+                    }
+                    break;    
+                default:
+            }
+            System.out.print("\n\n");
+        }
+        return false;
+    }
+    
+    //bank interface
+    public static boolean bankInterface(User user){
+        Interface.user = user;
+        exit = "n";
+        while(exit.equals("n")){
+            Print.printList(bankTaskList);
+            operation = Scan.getOperation(bankTaskList);
+            if(operation != -1){
+                Print.alertln(bankTaskList[operation]);
+            }
+            switch (operation) {
+                case 0:                
+                    exit = UIMethods.exit();
+                    break;
+                case 1:                
+                    return true;
+                case 2:     
+                    Print.printList(AccountManager.getAccounts());
+                    break;
+                case 3:   
+                    UIMethods.giveMoney();
                     break;
                 default:
             }
