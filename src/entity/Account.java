@@ -17,7 +17,7 @@ import utils.Print;
 public class Account implements Serializable{
     
     //variables
-    long id = System.currentTimeMillis()/new Random().nextInt();
+    long id = System.currentTimeMillis()/new Random().nextInt(10000);
     protected double money;
     
     //constructors
@@ -29,7 +29,7 @@ public class Account implements Serializable{
     @Override
     public String toString() {
         return "Account{" + 
-                "hash = " + App.BLUE + hashCode() + App.RESET + ", " +
+                "id = " + App.BLUE + getId() + App.RESET + ", " +
                 "money = " + App.BLUE + money + App.RESET + "}";
     }
     

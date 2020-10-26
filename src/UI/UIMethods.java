@@ -6,10 +6,12 @@
 package UI;
 
 import entity.Account;
+import entity.Deal;
 import entity.Product;
 import entity.User;
 import javamarket.App;
 import tools.managers.AccountManager;
+import tools.managers.DealManager;
 import tools.managers.ProductManager;
 import tools.managers.UserManager;
 import utils.Print;
@@ -136,11 +138,28 @@ public class UIMethods {
                 int product_index = Scan.getIndex(ProductManager.getProducts(), 1, "Выберите продукт: ");
                 Product product = ProductManager.getProducts().get(product_index-1);   
                 if(UserManager.buy(user, product)){
+                    
                     System.out.println("Вы успешно купили продукт: "+product.toString());
-                }     
+                } 
             }catch(RuntimeException e){
-                Print.errorln("Неверный индекс");
+                 Print.errorln("Неверный индекс!");
             }
+        }else{
+            Print.emptyMessage();
+        }
+    }
+    
+    static void sellProduct(User user) {
+        if(user.getProducts().size() > 0){
+
+                Print.printList(user.getProducts());
+                int product_index = Scan.getIndex(user.getProducts(), 1, "Выберите продукт: "); 
+                Product product = user.getProducts().get(product_index-1);
+                if(UserManager.sell(user, product_index-1)){
+                    System.out.println("Вы успешно продали товар: "+product.toString());
+                    System.out.println("На ваш счет зачислено " + product.getCost());
+                } 
+
         }else{
             Print.emptyMessage();
         }

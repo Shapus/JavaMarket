@@ -6,6 +6,7 @@
 package tools.managers;
 
 import entity.Account;
+import entity.Deal;
 import entity.Product;
 import entity.User;
 import java.util.ArrayList;
@@ -49,33 +50,33 @@ public class UserManager extends App{
         }
         account.setMoney(account.getMoney() - product.getCost());
         product.setQuantity(product.getQuantity()-1);
+        Product userProduct = new Product(product.getName(), product.getCost(), 1);
         for(Product p : user.getProducts()){
             if(p.getId() == product.getId()){
                 p.setQuantity(p.getQuantity()+1);
                 return AccountManager.saveNLoad() && UserManager.saveNLoad() && ProductManager.saveNLoad();
             }
         }
-        user.getProducts().add(product);
-        return AccountManager.saveNLoad() && UserManager.saveNLoad() && ProductManager.saveNLoad();
+        DealManager.getDeals().add(new Deal(user, product, Deal.Operation.BUY));
+        user.getProducts().add(userProduct);
+        return FileManager.saveAll();
     }
     
     //sell product
-    public static boolean sell(User user, Product product){
+    public static boolean sell(User user, int product_index){
         Account account = AccountManager.getAccount(user.getAccount());
-
-        if(user.getProducts().contains(product)){
-            account.setMoney(account.getMoney() + product.getCost());
-            for(Product p : user.getProducts()){
-                if(p.getId() == product.getId()){
-                    p.setQuantity(p.getQuantity()-1);
-                    if(p.getQuantity() == 0){
-                        user.getProducts().remove(p);
-                    }
-                    return AccountManager.saveNLoad() && UserManager.saveNLoad() && ProductManager.saveNLoad();
-                }
-            }
+        Product product = user.getProducts().get(product_index);
+        if(product.getQuantity() <= 0){
+            Print.errorln("Продукта нет в наличии");
+            return false;
         }
-        return AccountManager.saveNLoad() && UserManager.saveNLoad() && ProductManager.saveNLoad();
+        account.setMoney(account.getMoney() + product.getCost());
+        user.getProducts().get(product_index).setQuantity(product.getQuantity()-1);
+        if(user.getProducts().get(product_index).getQuantity() <= 0){
+            user.getProducts().remove(product_index);
+        };
+        DealManager.getDeals().add(new Deal(user, product, Deal.Operation.SELL));
+        return FileManager.saveAll();
     }
     
     //add user to ArrayList and save to file
@@ -116,12 +117,12 @@ public class UserManager extends App{
     
     //load users ArrayList from file
     public static void load(){
-        users = FileManager.loadFromFile(App.DIRECTORY_PATH+App.USERS_FILE_PATH);
+        users = FileManager.loadFromFile(Path.DIRECTORY.get() + Path.USERS.get());
     }
     
     //save users ArrayList to file
     public static boolean save(){
-        return FileManager.saveToFile(users, App.DIRECTORY_PATH+App.USERS_FILE_PATH);
+        return FileManager.saveToFile(users, Path.DIRECTORY.get() + Path.USERS.get());
     }
     
     public static boolean saveNLoad(){

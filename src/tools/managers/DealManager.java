@@ -31,7 +31,7 @@ public class DealManager extends App{
     
     //load customers ArrayList from file
     public static void load(){
-        deals = FileManager.loadFromFile(App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
+        deals = FileManager.loadFromFile(Path.DIRECTORY.get() + Path.DEALS.get());
         if(deals == null){
             deals = new ArrayList();
         }
@@ -39,7 +39,7 @@ public class DealManager extends App{
     
     //save customers ArrayList to file
     public static boolean save(){
-        return FileManager.saveToFile(deals, App.DIRECTORY_PATH+App.DEALS_FILE_PATH);
+        return FileManager.saveToFile(deals, Path.DIRECTORY.get() + Path.DEALS.get());
     }
     public static ArrayList getLastDeal(){
         ArrayList<Deal> lastDeal = new ArrayList();

@@ -83,6 +83,10 @@ public final class Product implements Serializable {
         }
         this.quantity = quantity;
     }
+    
+    public boolean inStock(){
+        return quantity>0;
+    }
 
     @Override
     public int hashCode() {

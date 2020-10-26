@@ -25,7 +25,7 @@ public class AccountManager extends App{
     public static Account getAccount(long id){
         Account account = null;
         for(Account c : accounts){
-            if(c.hashCode() == id){
+            if(c.getId() == id){
                 account = c;
                 break;
             }
@@ -73,12 +73,12 @@ public class AccountManager extends App{
     
     //load accounts ArrayList from file
     public static void load(){
-        accounts = FileManager.loadFromFile(App.DIRECTORY_PATH+App.ACCOUNTS_FILE_PATH);
+        accounts = FileManager.loadFromFile(Path.DIRECTORY.get() + Path.ACCOUNTS.get());
     }
     
     //save accounts ArrayList to file
     public static boolean save(){
-        return FileManager.saveToFile(accounts, App.DIRECTORY_PATH+App.ACCOUNTS_FILE_PATH);
+        return FileManager.saveToFile(accounts, Path.DIRECTORY.get() + Path.ACCOUNTS.get());
     }
     public static boolean saveNLoad(){
         boolean out;

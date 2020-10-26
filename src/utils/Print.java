@@ -30,8 +30,9 @@ public class Print {
         for (int i=0;i<list.size();i++) {          
             String str = String.format("| %d. %s ", i+1, list.get(i).toString());
             System.out.printf("%"+-len+"s |\n", str);
+            printLine(len);
         }
-        printLine(len);
+        
     }
     
     

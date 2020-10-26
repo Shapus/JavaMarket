@@ -39,7 +39,9 @@ public class Interface{
                         "Выйти из программы",
                         "Выйти из учетной записи",
                         "Список продуктов",
-                        "Купить продукт",
+                        "Купить товар",
+                        "Продать товар",
+                        "Мои товары",
                         "Текущий счет"
                         };
     public static String[] bankTaskList = {
@@ -117,12 +119,18 @@ public class Interface{
                     UIMethods.buyProduct(user);
                     break;
                 case 4:   
+                    UIMethods.sellProduct(user);
+                    break;
+                case 5:   
+                    Print.printList(user.getProducts());
+                    break;
+                case 6:   
                     for(Account acc : AccountManager.getAccounts()){
                         if(acc.getId() == user.getAccount()){
                             System.out.println(acc);
                         }
                     }
-                    break;    
+                    break;
                 default:
             }
             System.out.print("\n\n");

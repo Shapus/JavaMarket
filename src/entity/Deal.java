@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javamarket.App;
+import tools.managers.AccountManager;
 
 /**
  *
@@ -16,27 +17,44 @@ import javamarket.App;
  */
 public class Deal implements Serializable {
     
+    public enum Operation{
+        SELL("sell"), BUY("buy");
+        private String data;
+        Operation(String str){
+            data = str;
+        }
+        public String get(){
+            return data;
+        }
+    };
+    
     //variables
     private final int id;
     private final Date date;
-    private final Account customer;
+    private final long account;
+    private final User user;
     private final Product product;
     private final int quantity;
+    private final Operation operation;
     
     //costructors
-    public Deal(int id, int date, Account customer, Product product){
+    public Deal(User user, Product product, Operation operation){
         this.id = this.hashCode();
         this.date = new Date();
-        this.customer = customer;
+        this.user = user;
+        this.account = user.getAccount();
         this.product = product;
         this.quantity = 1;
+        this.operation = operation;
     }
-    public Deal(int id, int date, Account customer, Product product, int quantity){
+    public Deal(User user, Product product, int quantity, Operation operation){
         this.id = this.hashCode();
         this.date = new Date();
-        this.customer = customer;
+        this.user = user;
+        this.account = user.getAccount();
         this.product = product;
         this.quantity = quantity;
+        this.operation = operation;
     }    
 
     //toString
@@ -44,7 +62,9 @@ public class Deal implements Serializable {
     public String toString() {
         return "Deal " + App.BLUE + id + App.RESET + ":\n" +
                 "   date = " + App.BLUE + date + App.RESET + "\n" +
-                "   customer = " + App.BLUE + customer + App.RESET + "\n" +
+                "   user = " + App.BLUE + user + App.RESET + "\n" +
+                "   account = " + App.BLUE + AccountManager.getAccount(account) + App.RESET + "\n" +
+                "   operation = " + App.BLUE_BACKGROUND +App.WHITE + " " + operation.get() + " " + App.RESET + "\n" +
                 "   product = " + App.BLUE + product + App.RESET + "\n" +
                 "   quantity = " + App.BLUE + quantity + App.RESET;
     }
@@ -56,52 +76,11 @@ public class Deal implements Serializable {
     public Date getDate() {
         return date;
     }
-    public Account getCustomer() {
-        return customer;
+    public long getCustomer() {
+        return account;
     }
     public Product getProduct() {
         return product;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + this.id;
-        hash = 97 * hash + Objects.hashCode(this.date);
-        hash = 97 * hash + Objects.hashCode(this.customer);
-        hash = 97 * hash + Objects.hashCode(this.product);
-        hash = 97 * hash + this.quantity;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Deal other = (Deal) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (this.quantity != other.quantity) {
-            return false;
-        }
-        if (!Objects.equals(this.date, other.date)) {
-            return false;
-        }
-        if (!Objects.equals(this.customer, other.customer)) {
-            return false;
-        }
-        if (!Objects.equals(this.product, other.product)) {
-            return false;
-        }
-        return true;
     }
     
 }

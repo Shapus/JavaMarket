@@ -83,10 +83,11 @@ public class FileManager {
     }
     
     //save all
-    public static void saveAll(){
-        ProductManager.save();
-        AccountManager.save();
-        DealManager.save();
+    public static boolean saveAll(){
+        return ProductManager.save() &&
+        AccountManager.save() &&
+        DealManager.save() &&
+        UserManager.save();
     }
     
    //load all

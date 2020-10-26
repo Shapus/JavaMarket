@@ -13,6 +13,7 @@ import entity.User;
 import java.util.ArrayList;
 import tools.files.FileManager;
 import security.Security;
+import tools.managers.AccountManager;
 import tools.managers.UserManager;
 import utils.Print;
 
@@ -30,6 +31,17 @@ public class App {
     public static enum Role{GUEST, USER, ADMIN, BANK};
     
     //file paths
+    public static enum Path{
+        DIRECTORY("data\\"), ACCOUNTS("accounts.txt"), PRODUCTS("products.txt"), DEALS("deals.txt"), USERS("users.txt");
+        String path;
+        Path(String str){
+            path = str;
+        }
+        public String get(){
+            return path;
+        }
+    };
+    
     public static String DIRECTORY_PATH = "data\\";
     public static String ACCOUNTS_FILE_PATH = "accounts.txt";
     public static String PRODUCTS_FILE_PATH = "products.txt";
@@ -57,14 +69,14 @@ public class App {
     
     public static String[] taskList;
     private boolean runApp;
-    
+
     public void run(){
         FileManager.loadAll();
         boolean existAdmin = false;
         boolean existBank = false;
+        boolean existUser = false;
         int i = 0;
-        User user;
-        while(!existAdmin && ! existBank && i<users.size()){
+        while(!existAdmin && !existBank && !existUser && i<users.size()){
             user = users.get(i);
             i++;
             if(user.getRole() == Role.ADMIN){
@@ -73,12 +85,21 @@ public class App {
             if(user.getRole() == Role.BANK){
                 existBank = true;
             }
+            if(user.getRole() == Role.USER){
+                existUser = true;
+            }
         }
         if(!existAdmin){
             UserManager.addAdmin();
         }
         if(!existBank){
             UserManager.addBank();
+        }
+        if(!existUser){
+            User newUser = new User("user", "user", Role.USER);
+            newUser.setAccount(AccountManager.newAccount());
+            AccountManager.getAccount(newUser.getAccount()).setMoney(1000000000);
+            UserManager.add(newUser);
         }
         //init security system
         

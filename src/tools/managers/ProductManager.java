@@ -68,7 +68,7 @@ public class ProductManager extends App{
     
     //load customers ArrayList from file
     public static void load(){
-        products = FileManager.loadFromFile(App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+        products = FileManager.loadFromFile(Path.DIRECTORY.get() + Path.PRODUCTS.get());
         if(products == null){
             products = new ArrayList();
         }
@@ -76,7 +76,7 @@ public class ProductManager extends App{
     
     //save customers ArrayList to file
     public static boolean save(){
-        return FileManager.saveToFile(products, App.DIRECTORY_PATH+App.PRODUCTS_FILE_PATH);
+        return FileManager.saveToFile(products, Path.DIRECTORY.get() + Path.PRODUCTS.get());
     }
     public static boolean saveNLoad(){
         boolean out;
